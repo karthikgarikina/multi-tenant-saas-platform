@@ -57,11 +57,11 @@ export default function Users() {
     }
   };
 
-  const deactivate = async (id) => {
-    if (!confirm("Deactivate this user?")) return;
-    await api.patch(`/users/${id}/deactivate`);
-    fetchUsers();
-  };
+  const deleteUser = async (id) => {
+  if (!window.confirm("Delete this user permanently?")) return;
+  await api.delete(`/users/${id}`);
+  fetchUsers();
+};
 
   return (
     <Layout>
@@ -160,9 +160,13 @@ export default function Users() {
             <div style={{ marginTop: "8px" }}>
               <button onClick={() => startEdit(u)}>Edit</button>{" "}
               {u.isActive && (
-                <button onClick={() => deactivate(u.id)}>
-                  Deactivate
+                <button
+                style={{ background: "#dc2626" }}
+                onClick={() => deleteUser(u.id)}
+                >
+                Delete
                 </button>
+
               )}
             </div>
           </li>
