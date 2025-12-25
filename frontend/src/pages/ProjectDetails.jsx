@@ -58,16 +58,27 @@ export default function ProjectDetails() {
 
 
   const createTask = async (e) => {
-    e.preventDefault();
-    if (!title) return;
+  e.preventDefault();
 
-    await api.post(`/projects/${projectId}/tasks`, {
-        title,
-        description,
-        priority,
-        assignedToId: assignedToId || null,
-        dueDate: dueDate || null,
-    });
+  if (!title.trim()) {
+    alert("Task title is required");
+    return;
+  }
+
+  try {
+    const payload = {
+      title,
+      priority,
+    };
+
+    if (description.trim()) payload.description = description;
+    if (assignedToId) payload.assignedToId = assignedToId;
+    if (dueDate) {
+        payload.dueDate = new Date(dueDate).toISOString();
+    }
+
+
+    await api.post(`/projects/${projectId}/tasks`, payload);
 
     setTitle("");
     setDescription("");
@@ -76,41 +87,72 @@ export default function ProjectDetails() {
     setDueDate("");
 
     fetchTasks();
-   };
-
+  } catch (err) {
+    alert(
+      err.response?.data?.message ||
+      JSON.stringify(err.response?.data) ||
+      "Failed to create task"
+    );
+  }
+};
 
 
     const updateStatus = async (taskId, status) => {
         await api.patch(`/tasks/${taskId}/status`, { status });
         fetchTasks();
     };
-    const startEdit = (task) => {
-    setEditingTaskId(task.id);
-    setEditForm({
-        title: task.title,
-        description: task.description || "",
-        priority: task.priority,
-        assignedToId: task.assignedToId || "",
-        dueDate: task.dueDate ? task.dueDate.split("T")[0] : "",
-        status: task.status,
-    });
-    };
-    const updateTaskFull = async (taskId) => {
-    await api.put(`/tasks/${taskId}`, {
-        title: editForm.title,
-        description: editForm.description,
-        priority: editForm.priority,
-        assignedToId: editForm.assignedToId || null,
-    });
+   const startEdit = (task) => {
+  setEditingTaskId(task.id);
+  setEditForm({
+    title: task.title,
+    description: task.description || "",
+    priority: task.priority,
+    assignedToId: task.assignedToId || "",
+    dueDate: task.dueDate ? task.dueDate.split("T")[0] : "",
+    status: task.status,
+  });
+};
 
-    // status is separate endpoint
-    await api.patch(`/tasks/${taskId}/status`, {
+const updateTaskFull = async (taskId) => {
+  try {
+    const payload = {
+      title: editForm.title,
+      priority: editForm.priority,
+    };
+
+    if (editForm.description.trim()) {
+      payload.description = editForm.description;
+    }
+
+    if (editForm.assignedToId) {
+      payload.assignedToId = editForm.assignedToId;
+    }
+
+    if (editForm.dueDate) {
+        payload.dueDate = new Date(editForm.dueDate).toISOString();
+    }
+
+
+    await api.put(`/tasks/${taskId}`, payload);
+
+    // Status update (separate endpoint)
+    if (editForm.status) {
+      await api.patch(`/tasks/${taskId}/status`, {
         status: editForm.status,
-    });
+      });
+    }
 
     setEditingTaskId(null);
     fetchTasks();
-    };
+  } catch (err) {
+    alert(
+      err.response?.data?.message ||
+      JSON.stringify(err.response?.data) ||
+      "Failed to update task"
+    );
+  }
+};
+
 
 
 
