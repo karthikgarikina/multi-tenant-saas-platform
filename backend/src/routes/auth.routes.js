@@ -25,7 +25,7 @@ router.post(
   [
     body("email").isEmail(),
     body("password").notEmpty(),
-    body("tenantSubdomain").notEmpty(),
+    body("tenantSubdomain").optional().isString(),
   ],
   authController.login
 );

@@ -109,6 +109,64 @@ exports.login = async (req, res) => {
   const { email, password, tenantSubdomain } = req.body;
 
   try {
+    // -------------------------
+    // SUPER ADMIN LOGIN
+    // -------------------------
+    if (!tenantSubdomain) {
+      const user = await prisma.user.findFirst({
+        where: {
+          email,
+          role: "super_admin",
+        },
+      });
+
+      if (!user || !user.isActive) {
+        return res
+          .status(401)
+          .json({ success: false, message: "Invalid credentials" });
+      }
+
+      const passwordMatch = await bcrypt.compare(
+        password,
+        user.passwordHash
+      );
+      if (!passwordMatch) {
+        return res
+          .status(401)
+          .json({ success: false, message: "Invalid credentials" });
+      }
+
+      const token = generateToken({
+        userId: user.id,
+        tenantId: null,
+        role: user.role,
+      });
+
+      await logAudit({
+        userId: user.id,
+        action: "LOGIN_SUPER_ADMIN",
+        entityType: "user",
+        entityId: user.id,
+        ipAddress: req.ip,
+      });
+
+      return res.status(200).json({
+        success: true,
+        data: {
+          user: {
+            id: user.id,
+            email: user.email,
+            fullName: user.fullName,
+            role: user.role,
+          },
+          token,
+        },
+      });
+    }
+
+    // -------------------------
+    // TENANT USER LOGIN
+    // -------------------------
     const tenant = await prisma.tenant.findUnique({
       where: { subdomain: tenantSubdomain },
     });
@@ -174,7 +232,6 @@ exports.login = async (req, res) => {
           tenantId: user.tenantId,
         },
         token,
-        expiresIn: 86400,
       },
     });
   } catch (error) {
