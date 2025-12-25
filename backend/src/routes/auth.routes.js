@@ -10,14 +10,32 @@ const router = express.Router();
 router.post(
   "/register-tenant",
   [
-    body("tenantName").notEmpty(),
-    body("subdomain").notEmpty(),
-    body("adminEmail").isEmail(),
-    body("adminPassword").isLength({ min: 8 }),
-    body("adminFullName").notEmpty(),
+    body("tenantName")
+      .trim()
+      .notEmpty()
+      .withMessage("Tenant name is required"),
+
+    body("subdomain")
+      .trim()
+      .matches(/^[a-z0-9]+$/)
+      .withMessage("Subdomain must contain lowercase letters and numbers only"),
+
+    body("adminEmail")
+      .isEmail()
+      .withMessage("Valid admin email required"),
+
+    body("adminFullName")
+      .trim()
+      .notEmpty()
+      .withMessage("Admin full name is required"),
+
+    body("adminPassword")
+      .isLength({ min: 6 })
+      .withMessage("Password must be at least 6 characters"),
   ],
   authController.registerTenant
 );
+
 
 // Login
 router.post(
