@@ -32,4 +32,20 @@ router.get(
   tenantController.listTenants
 );
 
+// ✅ UPDATE TENANT PLAN (super admin only)
+router.patch(
+  "/:id/plan",
+  authenticate,
+  authorize("super_admin"),
+  tenantController.updateTenantPlan
+);
+
+router.patch(
+  "/:id/status",
+  authenticate,
+  authorize("super_admin"),
+  tenantController.updateTenantStatus
+);
+
+
 module.exports = router;
