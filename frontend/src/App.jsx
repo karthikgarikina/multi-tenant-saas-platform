@@ -6,17 +6,18 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import Projects from "./pages/Projects";
 import ProjectDetails from "./pages/ProjectDetails";
 import Users from "./pages/Users";
-
-
-
+import Register from "./pages/Register";
+import Tenants from "./pages/Tenants";
 
 export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/" element={<Navigate to="/register" />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
 
           <Route
             path="/dashboard"
@@ -51,7 +52,14 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/tenants" element={<ProtectedRoute roles={["super_admin"]}><div>Tenants Page</div></ProtectedRoute>} />
+          <Route
+            path="/tenants"
+            element={
+              <ProtectedRoute roles={["super_admin"]}>
+                <Tenants />
+              </ProtectedRoute>
+            }
+          />
 
         </Routes>
       </BrowserRouter>
