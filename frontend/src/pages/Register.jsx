@@ -167,23 +167,23 @@ const submit = async (e) => {
         </div>
 
         <div style={{ marginBottom: "15px" }}>
-  <label
-    style={{
-      display: "flex",
-      flexDirection:"column-reverse",
-      alignItems: "center",
-      gap: "8px",
-    }}
-  >
-    <input
-      type="checkbox"
-      name="agree"
-      checked={form.agree}
-      onChange={handleChange}
-    />
-    <span>I agree to Terms & Conditions</span>
-  </label>
-</div>
+          <label
+            style={{
+              display: "flex",
+              flexDirection:"column-reverse",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            <input
+              type="checkbox"
+              name="agree"
+              checked={form.agree}
+              onChange={handleChange}
+            />
+            <span>I agree to Terms & Conditions</span>
+          </label>
+        </div>
 
 
         <button style={{ width: "100%" }} disabled={loading}>

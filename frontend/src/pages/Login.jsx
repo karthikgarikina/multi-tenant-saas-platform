@@ -35,7 +35,15 @@ export default function Login() {
   };
 
   return (
-    <>
+    <div
+        style={{
+        maxWidth: "480px",
+        margin: "50px auto",
+        padding: "25px",
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+        }}
+    >
     <form onSubmit={submit}>
       <h2>Login</h2>
 
@@ -70,7 +78,7 @@ export default function Login() {
       New organization? <Link to="/register">Register here</Link>
     </p>
 
-    </>
+  </div>
     
   );
 }

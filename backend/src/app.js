@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const healthRoutes = require("./routes/health.routes");
 const authRoutes = require("./routes/auth.routes");
 const tenantRoutes = require("./routes/tenant.routes");
 const userRoutes = require("./routes/user.routes");
@@ -10,6 +11,7 @@ const app = express();
 // Middlewares
 app.use(cors());
 app.use(express.json());
+app.use("/api", healthRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/tenants", tenantRoutes);
 app.use("/api/users", userRoutes);

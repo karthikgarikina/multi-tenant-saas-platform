@@ -110,7 +110,6 @@ export default function Tenants() {
                     }
                 >
                     <option value="active">Active</option>
-                    <option value="trial">Trial</option>
                     <option value="suspended">Suspended</option>
                 </select>
                 </td>

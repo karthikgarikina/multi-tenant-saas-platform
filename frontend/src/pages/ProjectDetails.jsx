@@ -407,22 +407,22 @@ const updateTaskFull = async (taskId) => {
                 {/* USER STATUS CONTROL */}
                 {user.role === "user" &&
                     t.assignedToId === user.id && (
-                    <div>
-                        <button
+                    <div >
+                        <button style={{padding:"8px", margin:"10px"}}
                         onClick={() =>
                             updateStatus(t.id, "todo")
                         }
                         >
                         Todo
                         </button>
-                        <button
+                        <button style={{padding:"8px", margin:"10px"}}
                         onClick={() =>
                             updateStatus(t.id, "in_progress")
                         }
                         >
                         In Progress
                         </button>
-                        <button
+                        <button style={{padding:"8px", margin:"10px"}}
                         onClick={() =>
                             updateStatus(t.id, "completed")
                         }
