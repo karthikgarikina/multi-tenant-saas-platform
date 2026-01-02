@@ -154,6 +154,20 @@ Import this file into Postman to test all APIs.
 
 ---
 
+## 🔐 Super Admin Access
+
+Default Super Admin credentials are provided for demo and testing purposes:
+
+**Email:**  
+`superadmin@system.com`
+
+**Password:**  
+`Admin@123`
+
+### Notes
+- All other credentials are there clearly in seed file.
+---
+
 ## Live Demo
 
 - **Frontend**: https://tenantspace.vercel.app  
